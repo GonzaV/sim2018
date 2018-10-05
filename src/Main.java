@@ -5,6 +5,7 @@ public class Main {
 
     public static void main(String args[]){
 
+        Integer duracionEnDias = 0;
         Scanner sc = new Scanner(System.in);
         HashMap<String,Integer> mapaDeCantidades = new HashMap<>();
         HashMap<String,Integer> mapaDeDiasEntrePedidos = new HashMap<>();
@@ -26,6 +27,19 @@ public class Main {
         mapaDeDiasEntrePedidos.put("scottish", sc.nextInt());
         System.out.println("Ingrese cada cuantos dias se hara un nuevo pedido de Rubia");
         mapaDeDiasEntrePedidos.put("rubia", sc.nextInt());
+
+        System.out.println("Ingrese la duracion en dias de la simulacion, debe ser mayor a 180");
+        duracionEnDias = sc.nextInt();
+
+        while(duracionEnDias <= 180){
+
+            System.out.println("El valor debe ser mayor a 180, por favor ingrese otro valor");
+            duracionEnDias = sc.nextInt();
+
+        }
+
+        
+
 
 
 
