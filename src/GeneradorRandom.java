@@ -35,10 +35,21 @@ public class GeneradorRandom {
 
     }
 
-    public int getDiasDuracion(int valorMinimo,int valorMaximo){
+    public float getProbaProximaVenta(){
+
+        Random random = new Random();
+        //El metodo nextFloat() devuelve por def un numero entre 0.0 y 1.0 (conjunto cerrado)
+        float probabilidad = random.nextFloat();
+
+        return probabilidad;
+
+    }
+
+    private int getDiasDuracion(int valorMinimo,int valorMaximo){
 
         Random random = new Random();
         int diasDuracion = random.nextInt(valorMaximo - valorMinimo) + valorMinimo;
+
         return diasDuracion;
 
     }
