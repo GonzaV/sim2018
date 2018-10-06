@@ -3,9 +3,12 @@ import java.util.Scanner;
 
 public class Main {
 
+
     public static void main(String args[]){
 
-        Integer duracionEnDias = 0;
+        GeneradorDeTiempos genTiempos = new GeneradorDeTiempos();
+        float tppec = 0; //Tiempo proxima preparacion estilo cerveza
+        int duracionEnDias = 0;
         Scanner sc = new Scanner(System.in);
         HashMap<String,Integer> mapaDeCantidades = new HashMap<>();
         HashMap<String,Integer> mapaDeDiasEntrePedidos = new HashMap<>();
@@ -38,7 +41,8 @@ public class Main {
 
         }
 
-        
+        tppec = genTiempos.proximoTiempoPreparacion();
+
 
 
 
