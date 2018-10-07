@@ -74,6 +74,12 @@ public class ControladorGeneral {
 
         //ACTUALIZO EL TOTAL HISTORICO DE CERVEZA MANEJADA
         listaDeLitrosHistoricos.set(cervezaPedida, listaDeLitrosHistoricos.get(cervezaPedida) + listaDeCantidades.get(cervezaPedida));
+
+        //GENERO EL PROXIMO VENCIMIENTO PARA EL STOCK QUE ACABO DE REPONER
+        double vencimiento = genRandom.generarTPD(cervezaPedida);
+
+        //GUARDO EN LA LISTA AUXILIAR ESTE PROXIMO VENCIMIENTO PARA NO PISAR EL VENCIMIENTO DEL STOCK ANTERIOR
+        this.listaDeProximoVencimientoStockNuevo.set(cervezaPedida, contTiempo.getTiempoActual() + vencimiento);
     }
 
     private void simularVencimiento() {
