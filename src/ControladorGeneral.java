@@ -2,19 +2,104 @@ import java.util.*;
 
 public class ControladorGeneral {
 
+    /*VARIABLES TEMPORALES A CAMBIAR*/
+    private int tppec = 0;
+    private int tpd = 0;
+    private int tpll = 0;
+    /* ---------------------------- */
+    private ControladorDeTiempo contTiempo = new ControladorDeTiempo();
     private Scanner sc = new Scanner(System.in);
     private GeneradorRandom genRandom = new GeneradorRandom();
+    private HashMap<String,Integer> mapaDeStockNuevo = new HashMap<>();
+    private HashMap<String,Integer> mapaDeStockActual = new HashMap<>();
     private HashMap<String,Integer> mapaDeCantidades = new HashMap<>();
     private HashMap<String,Integer> mapaDeDiasEntrePedidos = new HashMap<>();
     private HashMap<String,Integer> mapaDeProximoDesperdicio = new HashMap<>();
 
     public void correrAlgoritmoPrincipal() {
 
-        configInicial();
+        //TOMO EL MENOR DE TPPEC, TPD, ETC, para simplificar ahora no lo busco.
+
+        if(tppec <= tpd){
+
+            if(tppec <= tpll){
+
+                contTiempo.setTiempoActual(tppec);
+                //Aca ago TPPEC(i) <- T + N(i), es decir, T mas dias para la prox compra de (i)
+                tppec = contTiempo.getTiempoActual() + 1;
+
+                /*
+                ACTUALIZO EL STOCK DE (i), EN ESTE CASO, COMO EJEMPLO, DICE RUBIA
+                mapaDeStockActual.put("rubia",mapaDeStockActual.get("rubia") + cantidadComprada);
+                 */
+
+                /*
+                ACTUALIZO EL STOCK NUEVO DE (i), EN ESTE CASO, COMO EJEMPLO, DICE RUBIA
+                EL STOCK NUEVO ES EL RECIEN COMPRADO, PARA NO TIRARLO CUANDO LLEGUE EL TPD
+                mapaDeStockNuevo.put("rubia", cantidadComprada);
+                 */
+
+                chequearTiempoFinal();
+
+            }
+            else{
+
+
+
+            }
+
+
+        }
+        else{
+
+
+
+        }
 
     }
 
-    private void configInicial() {
+    private void chequearTiempoFinal() {
+
+        if(contTiempo.getTiempoActual() >= contTiempo.getTiempoTotal()){
+
+            //TODO
+
+        }
+        else{
+
+            correrAlgoritmoPrincipal();
+
+        }
+
+    }
+
+    private void generarTPPEC() {
+
+        Random random = new Random();
+
+        tppec = random.nextInt();
+
+    }
+
+
+    private void generarTPLL() {
+
+        Random random = new Random();
+
+        tpll = random.nextInt();
+
+    }
+
+
+    private void generarTPD(){
+
+        Random random = new Random();
+
+        tpd = random.nextInt();
+
+    }
+
+    public void configInicial() {
         System.out.println("Ingrese cantidad de cerveza del tipo Ipa que desea comprar en cada pedido");
         mapaDeCantidades.put("ipa", sc.nextInt());
         System.out.println("Ingrese cantidad de cerveza del tipo Stout que desea comprar en cada pedido");
@@ -43,10 +128,18 @@ public class ControladorGeneral {
 
         }
 
+        contTiempo.setTiempoTotal(duracionEnDias);
+
         mapaDeProximoDesperdicio.put("rubia",genRandom.getDiasDuracionRubia());
         mapaDeProximoDesperdicio.put("stout",genRandom.getDiasDuracionStout());
         mapaDeProximoDesperdicio.put("scottish",genRandom.getDiasDuracionScottish());
         mapaDeProximoDesperdicio.put("ipa",genRandom.getDiasDuracionIpa());
+
+        generarTPPEC();
+
+        generarTPD();
+
+        generarTPLL();
 
     }
 
