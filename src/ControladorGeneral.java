@@ -2,10 +2,12 @@ import java.util.*;
 
 public class ControladorGeneral {
 
+    /*
     private int INDICEIPA = 0;
     private int INDICESTOUT = 1;
     private int INDICESCOTTISH = 2;
     private int INDICERUBIA = 3;
+    */
 
     private double ccs = 0;
     private double menorTppec = 0;
@@ -16,13 +18,13 @@ public class ControladorGeneral {
     private Scanner sc = new Scanner(System.in);
     private GeneradorRandom genRandom = new GeneradorRandom();
 
-    private HashMap<String,Integer> mapaDeArrepentidos = new HashMap<>();
+    private List<Integer> listaDeArrepentidos = new ArrayList<>();
     private List<Double> listaDeLitrosHistoricos = new ArrayList<>();
     private List<Double> listaDeStockNuevo = new ArrayList<>();
     private List<Double> listaDeStockViejo = new ArrayList<>();
     private List<Double> listaDeCantidades = new ArrayList<>();
     private List<Double> listaDiasEntrePedidos = new ArrayList<>();
-
+    private List<Double> listaTotalDeElecciones = new ArrayList<>(); //CTC(i)
 
 
     public void correrAlgoritmoPrincipal() {
@@ -56,7 +58,6 @@ public class ControladorGeneral {
 
             }
 
-
         }
         else{
 
@@ -69,8 +70,6 @@ public class ControladorGeneral {
 
                 contTiempo.setTiempoActual(menorTpd);
 
-
-
             }
 
         }
@@ -79,44 +78,44 @@ public class ControladorGeneral {
 
     private void simularLlegadaCliente() {
 
-        int cervezaElegida = null;
+        int cervezaElegida = genRandom.generarEleccionCerveza();
 
         contTiempo.setTiempoActual(tpll);
 
         tpll = contTiempo.getTpll();
 
         //EN ESTE METODO DEBERIA AUMENTAR CTC(i) EN 1
-        cervezaElegida = genRandom.generarEleccionCerveza();
+        listaTotalDeElecciones.set(cervezaElegida,listaTotalDeElecciones.get(cervezaElegida) + 1);
 
         ccs = genRandom.generarCCS();
 
-        if(mapaDeStockViejo.get(cervezaElegida) + mapaDeStockNuevo.get(cervezaElegida) >= ccs){
+        if(listaDeStockViejo.get(cervezaElegida) + listaDeStockNuevo.get(cervezaElegida) >= ccs){
 
-            if(mapaDeStockViejo.get(cervezaElegida) > 0){
+            if(listaDeStockViejo.get(cervezaElegida) > 0){
 
-                if(mapaDeStockViejo.get(cervezaElegida) >= ccs){
+                if(listaDeStockViejo.get(cervezaElegida) >= ccs){
 
-                    mapaDeStockViejo.put(cervezaElegida,mapaDeStockViejo.get(cervezaElegida) - ccs);
+                    listaDeStockViejo.set(cervezaElegida,listaDeStockViejo.get(cervezaElegida) - ccs);
 
                 }
                 else{
 
-                    mapaDeStockNuevo.put(cervezaElegida,mapaDeStockNuevo.get(cervezaElegida) + mapaDeStockViejo.get(cervezaElegida) - ccs);
-                    mapaDeStockViejo.put(cervezaElegida,0);
+                    listaDeStockNuevo.set(cervezaElegida,listaDeStockNuevo.get(cervezaElegida) + listaDeStockViejo.get(cervezaElegida) - ccs);
+                    listaDeStockViejo.set(cervezaElegida,0.0);
 
                 }
 
             }
             else{
 
-                mapaDeStockNuevo.put(cervezaElegida,mapaDeStockNuevo.get(cervezaElegida) - ccs);
+                listaDeStockNuevo.set(cervezaElegida,listaDeStockNuevo.get(cervezaElegida) - ccs);
 
             }
 
         }
         else{
 
-            mapaDeArrepentidos.put(cervezaElegida,mapaDeArrepentidos.get(cervezaElegida) + 1);
+            listaDeArrepentidos.set(cervezaElegida,listaDeArrepentidos.get(cervezaElegida) + 1);
 
         }
 
@@ -143,11 +142,11 @@ public class ControladorGeneral {
         System.out.println("Ingrese cantidad de cerveza del tipo Ipa que desea comprar en cada pedido");
         listaDeCantidades.add(sc.nextDouble());
         System.out.println("Ingrese cantidad de cerveza del tipo Stout que desea comprar en cada pedido");
-        listaDeCantidades.put(sc.nextDouble());
+        listaDeCantidades.add(sc.nextDouble());
         System.out.println("Ingrese cantidad de cerveza del tipo Scottish que desea comprar en cada pedido");
-        listaDeCantidades.put(sc.nextDouble());
+        listaDeCantidades.add(sc.nextDouble());
         System.out.println("Ingrese cantidad de cerveza del tipo Rubia que desea comprar en cada pedido");
-        listaDeCantidades.put(sc.nextDouble());
+        listaDeCantidades.add(sc.nextDouble());
 
         double leido = 0;
 
@@ -192,6 +191,5 @@ public class ControladorGeneral {
         tpll = contTiempo.getTpll();
 
     }
-
 
 }

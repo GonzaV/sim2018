@@ -51,9 +51,38 @@ public class GeneradorRandom {
 
     }
 
-    public double generarEleccionCerveza(){
+    public int generarEleccionCerveza(){
 
+        Float resultadoRandom = random.nextFloat();
 
+        if(resultadoRandom <= 0.1){
+
+            return 3;
+
+        }
+        else{
+
+            if(resultadoRandom <= 0.25 && resultadoRandom > 0.1){
+
+                return 2;
+
+            }
+            else{
+
+                if(resultadoRandom <= 0.45 && resultadoRandom > 0.25){
+
+                    return 1;
+
+                }
+                else{
+
+                    return 0;
+
+                }
+
+            }
+
+        }
 
     }
 
