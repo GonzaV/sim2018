@@ -1,83 +1,41 @@
-    import java.util.Random;
+import java.util.Random;
 
 public class GeneradorRandom {
 
-    private int valorMinimoRubia = 20;
-    private int valorMaximoRubia = 40;
-    private int valorMinimoIpa = 22;
-    private int valorMaximoIpa = 36;
-    private int valorMinimoStout = 25;
-    private int valorMaximoStout = 37;
-    private int valorMinimoScottish = 18;
-    private int valorMaximoScottish = 33;
+    private Random random = new Random();
 
-    public int getDiasDuracionRubia(){
+    public double getDiasDuracionRubia(){
 
-      return getDiasDuracion(valorMinimoRubia,valorMaximoRubia);
+      return 20*random.nextFloat() + 20;
 
     }
 
-    public int getDiasDuracionIpa(){
+    public double getDiasDuracionIpa(){
 
-        return getDiasDuracion(valorMinimoIpa, valorMaximoIpa);
-
-    }
-
-    public int getDiasDuracionStout(){
-
-        return getDiasDuracion(valorMinimoStout,valorMaximoStout);
+        return 14*random.nextFloat() + 22;
 
     }
 
-    public int getDiasDuracionScottish(){
+    public double getDiasDuracionStout(){
 
-        return getDiasDuracion(valorMinimoScottish,valorMaximoScottish);
-
-    }
-
-    public float getProbaProximaVenta(){
-
-        Random random = new Random();
-        //El metodo nextFloat() devuelve por def un numero entre 0.0 y 1.0 (conjunto cerrado)
-        float probabilidad = random.nextFloat();
-
-        return probabilidad;
+        return 12*random.nextFloat() + 25;
 
     }
 
-    private int getDiasDuracion(int valorMinimo,int valorMaximo){
+    public double getDiasDuracionScottish(){
 
-        Random random = new Random();
-        int diasDuracion = random.nextInt(valorMaximo - valorMinimo) + valorMinimo;
-
-        return diasDuracion;
+        return 15*random.nextFloat() + 18;
 
     }
 
-    public int generarIA(){
+    public double generarIA() {
 
-        Random random = new Random();
-        return random.nextInt();
+       float r = random.nextFloat();
 
-    }
-
-    public int generarTPPEC() {
-
-        Random random = new Random();
-
-        return random.nextInt();
+       //Divido por 1440 para pasarlo a dias, un dia tiene 1440 minutos
+       return (380.91* (Math.pow(Math.pow(1/(1-r),1/397.15) - 1,1/1.7015))) / 1440;
 
     }
-
-
-    public int generarTPLL() {
-
-        Random random = new Random();
-
-        return random.nextInt();
-
-    }
-
 
     public int generarTPD(){
 
@@ -87,50 +45,16 @@ public class GeneradorRandom {
 
     }
 
-    public int generarCCS(){
+    public float generarCCS(){
 
-        Random random = new Random();
-
-        return random.nextInt();
+        return (random.nextFloat() + 2)/5;
 
     }
 
-    public String generarEleccionCerveza(){
+    public double generarEleccionCerveza(){
 
-        return "HARCODEADO";
+
 
     }
 
-
-    public int getValorMinimoRubia() {
-        return valorMinimoRubia;
-    }
-
-    public int getValorMaximoRubia() {
-        return valorMaximoRubia;
-    }
-
-    public int getValorMinimoIpa() {
-        return valorMinimoIpa;
-    }
-
-    public int getValorMaximoIpa() {
-        return valorMaximoIpa;
-    }
-
-    public int getValorMinimoStout() {
-        return valorMinimoStout;
-    }
-
-    public int getValorMaximoStout() {
-        return valorMaximoStout;
-    }
-
-    public int getValorMinimoScottish() {
-        return valorMinimoScottish;
-    }
-
-    public int getValorMaximoScottish() {
-        return valorMaximoScottish;
-    }
 }

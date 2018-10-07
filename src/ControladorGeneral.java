@@ -2,53 +2,50 @@ import java.util.*;
 
 public class ControladorGeneral {
 
-    /*VARIABLES TEMPORALES A CAMBIAR*/
-    private int tppec = 0;
-    private int tpd = 0;
-    private int tpll = 0;
-    private int ia = 0;
-    private int ccs = 0;
-    /* ---------------------------- */
+    private int INDICEIPA = 0;
+    private int INDICESTOUT = 1;
+    private int INDICESCOTTISH = 2;
+    private int INDICERUBIA = 3;
+
+    private double ccs = 0;
+    private double menorTppec = 0;
+    private double menorTpd = 0;
+    private double tpll = 0;
+
     private ControladorDeTiempo contTiempo = new ControladorDeTiempo();
     private Scanner sc = new Scanner(System.in);
     private GeneradorRandom genRandom = new GeneradorRandom();
+
     private HashMap<String,Integer> mapaDeArrepentidos = new HashMap<>();
-    private HashMap<String,Integer> mapaDeLitrosHistoricos = new HashMap<>();
-    private HashMap<String,Integer> mapaDeStockNuevo = new HashMap<>();
-    private HashMap<String,Integer> mapaDeStockViejo = new HashMap<>();
-    private HashMap<String,Integer> mapaDeCantidades = new HashMap<>();
-    private HashMap<String,Integer> mapaDeDiasEntrePedidos = new HashMap<>();
-    private HashMap<String,Integer> mapaDeProximoDesperdicio = new HashMap<>();
+    private List<Double> listaDeLitrosHistoricos = new ArrayList<>();
+    private List<Double> listaDeStockNuevo = new ArrayList<>();
+    private List<Double> listaDeStockViejo = new ArrayList<>();
+    private List<Double> listaDeCantidades = new ArrayList<>();
+    private List<Double> listaDiasEntrePedidos = new ArrayList<>();
+
+
 
     public void correrAlgoritmoPrincipal() {
 
-        //TOMO EL MENOR DE TPPEC, TPD, ETC, para simplificar ahora no lo busco.
+        if(menorTppec <= menorTpd){
 
-        if(tppec <= tpd){
+            if(menorTppec <= tpll){
 
-            if(tppec <= tpll){
+                int indiceAcambiar = contTiempo.getListaDeTiempoProxPedido().indexOf(menorTppec);
 
-                contTiempo.setTiempoActual(tppec);
-                //Aca ago TPPEC(i) <- T + N(i), es decir, T mas dias para la prox compra de (i)
-                tppec = contTiempo.getTiempoActual() + 1;
+                contTiempo.setTiempoActual(menorTppec);
 
-                /*
-                EL QUE ERA STOCK NUEVO AHORA ES VIEJO, EN ESTE CASO, COMO EJEMPLO, DICE RUBIA
-                mapaDeStockViejo.put("rubia",mapaDeStockNuevo.get("rubia"));
-                 */
+                //Aca hago TPPEC(i) <- T + N(i), es decir, T mas dias para la prox compra de (i)
+                contTiempo.getListaDeTiempoProxPedido().set(indiceAcambiar,contTiempo.getListaDeTiempoProxPedido().get(indiceAcambiar) + listaDiasEntrePedidos.get(indiceAcambiar));
 
-                /*
-                ACTUALIZO EL STOCK NUEVO DE (i) CON LO COMPRADO, EN ESTE CASO, COMO EJEMPLO, DICE RUBIA
-                RECORDAR QUE EL QUE ERA NUEVO PASO A SER VIEJO POR LA COMPRA RECIENTE
-                mapaDeStockNuevo.put("rubia", cantidadComprada);
-                 */
+                //EL QUE ERA STOCK NUEVO AHORA ES VIEJO
+                listaDeStockViejo.set(indiceAcambiar, listaDeStockViejo.get(indiceAcambiar) + listaDeStockNuevo.get(indiceAcambiar));
 
-                /*
-                ACTUALIZO EL TOTAL HISTORICO DE CERVEZA MANEJADA
-                mapaDeLitrosHistoricos.put("rubia", mapaDeLitrosHistoricos.get("rubia") + cantidadComprada);
-                 */
+                //ACTUALIZO EL STOCK NUEVO DE (i) CON LO COMPRADO. RECORDAR QUE EL QUE ERA NUEVO PASO A SER VIEJO POR LA COMPRA RECIENTE
+                listaDeStockNuevo.set(indiceAcambiar,listaDeCantidades.get(indiceAcambiar));
 
-
+                //ACTUALIZO EL TOTAL HISTORICO DE CERVEZA MANEJADA
+                listaDeLitrosHistoricos.set(indiceAcambiar, listaDeLitrosHistoricos.get(indiceAcambiar) + listaDeCantidades.get(indiceAcambiar));
 
                 chequearTiempoFinal();
 
@@ -63,7 +60,18 @@ public class ControladorGeneral {
         }
         else{
 
+            if(tpll <= menorTpd){
 
+                simularLlegadaCliente();
+
+            }
+            else{
+
+                contTiempo.setTiempoActual(menorTpd);
+
+
+
+            }
 
         }
 
@@ -71,13 +79,11 @@ public class ControladorGeneral {
 
     private void simularLlegadaCliente() {
 
-        String cervezaElegida = null;
+        int cervezaElegida = null;
 
         contTiempo.setTiempoActual(tpll);
 
-        ia = genRandom.generarIA();
-
-        tpll = contTiempo.getTiempoActual() + ia;
+        tpll = contTiempo.getTpll();
 
         //EN ESTE METODO DEBERIA AUMENTAR CTC(i) EN 1
         cervezaElegida = genRandom.generarEleccionCerveza();
@@ -133,65 +139,57 @@ public class ControladorGeneral {
 
     }
 
-
-
     public void configInicial() {
         System.out.println("Ingrese cantidad de cerveza del tipo Ipa que desea comprar en cada pedido");
-        mapaDeCantidades.put("ipa", sc.nextInt());
+        listaDeCantidades.add(sc.nextDouble());
         System.out.println("Ingrese cantidad de cerveza del tipo Stout que desea comprar en cada pedido");
-        mapaDeCantidades.put("stout", sc.nextInt());
+        listaDeCantidades.put(sc.nextDouble());
         System.out.println("Ingrese cantidad de cerveza del tipo Scottish que desea comprar en cada pedido");
-        mapaDeCantidades.put("scottish", sc.nextInt());
+        listaDeCantidades.put(sc.nextDouble());
         System.out.println("Ingrese cantidad de cerveza del tipo Rubia que desea comprar en cada pedido");
-        mapaDeCantidades.put("rubia", sc.nextInt());
+        listaDeCantidades.put(sc.nextDouble());
+
+        double leido = 0;
 
         System.out.println("Ingrese cada cuantos dias se hara un nuevo pedido de Ipa");
-        mapaDeDiasEntrePedidos.put("ipa", sc.nextInt());
+        leido = sc.nextDouble();
+        contTiempo.getListaDeTiempoProxPedido().add(leido);
+        listaDiasEntrePedidos.add(leido);
         System.out.println("Ingrese cada cuantos dias se hara un nuevo pedido de Stout");
-        mapaDeDiasEntrePedidos.put("stout", sc.nextInt());
+        leido = sc.nextDouble();
+        contTiempo.getListaDeTiempoProxPedido().add(leido);
+        listaDiasEntrePedidos.add(leido);
         System.out.println("Ingrese cada cuantos dias se hara un nuevo pedido de Scottish");
-        mapaDeDiasEntrePedidos.put("scottish", sc.nextInt());
+        leido = sc.nextDouble();
+        contTiempo.getListaDeTiempoProxPedido().add(leido);
+        listaDiasEntrePedidos.add(leido);
         System.out.println("Ingrese cada cuantos dias se hara un nuevo pedido de Rubia");
-        mapaDeDiasEntrePedidos.put("rubia", sc.nextInt());
+        leido = sc.nextDouble();
+        contTiempo.getListaDeTiempoProxPedido().add(leido);
+        listaDiasEntrePedidos.add(leido);
 
         System.out.println("Ingrese la duracion en dias de la simulacion, debe ser mayor a 180");
-        int duracionEnDias = sc.nextInt();
+        double duracionEnDias = sc.nextDouble();
 
         while(duracionEnDias <= 180){
 
             System.out.println("El valor debe ser mayor a 180, por favor ingrese otro valor");
-            duracionEnDias = sc.nextInt();
+            duracionEnDias = sc.nextDouble();
 
         }
 
         contTiempo.setTiempoTotal(duracionEnDias);
 
-        mapaDeProximoDesperdicio.put("rubia",genRandom.getDiasDuracionRubia());
-        mapaDeProximoDesperdicio.put("stout",genRandom.getDiasDuracionStout());
-        mapaDeProximoDesperdicio.put("scottish",genRandom.getDiasDuracionScottish());
-        mapaDeProximoDesperdicio.put("ipa",genRandom.getDiasDuracionIpa());
+        contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionIpa());
+        contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionStout());
+        contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionScottish());
+        contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionRubia());
 
-        tppec = genRandom.generarTPPEC();
+        menorTppec = contTiempo.getMenorTppec();
 
-        tpd = genRandom.generarTPD();
+        menorTpd = contTiempo.getMenorTpd();
 
-        tpll = genRandom.generarTPLL();
-
-    }
-
-    public String getClaveMenorDiasDuracion(){
-
-        int min = Collections.min(mapaDeProximoDesperdicio.values());
-        String clave = null;
-
-        for(Map.Entry entry: mapaDeProximoDesperdicio.entrySet()){
-            if(min == (int)entry.getValue()){
-                clave = (String)entry.getKey();
-                break; //Porque es un mapa one to one
-            }
-        }
-
-        return clave;
+        tpll = contTiempo.getTpll();
 
     }
 
