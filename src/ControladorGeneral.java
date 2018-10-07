@@ -24,7 +24,7 @@ public class ControladorGeneral {
     private List<Double> listaDeStockViejo = new ArrayList<>();
     private List<Double> listaDeCantidades = new ArrayList<>();
     private List<Double> listaDiasEntrePedidos = new ArrayList<>();
-    private List<Double> listaTotalDeElecciones = new ArrayList<>(); //CTC(i)
+    private List<Integer> listaTotalDeElecciones = new ArrayList<>(); //CTC(i)
 
 
     public void correrAlgoritmoPrincipal() {
@@ -127,7 +127,7 @@ public class ControladorGeneral {
 
         if(contTiempo.getTiempoActual() >= contTiempo.getTiempoTotal()){
 
-            //TODO
+            System.out.println("Termine");
 
         }
         else{
@@ -183,6 +183,31 @@ public class ControladorGeneral {
         contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionStout());
         contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionScottish());
         contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionRubia());
+
+        listaTotalDeElecciones.add(0);
+        listaTotalDeElecciones.add(0);
+        listaTotalDeElecciones.add(0);
+        listaTotalDeElecciones.add(0);
+
+        listaDeStockViejo.add(10.0);
+        listaDeStockViejo.add(10.0);
+        listaDeStockViejo.add(10.0);
+        listaDeStockViejo.add(10.0);
+
+        listaDeStockNuevo.add(1.0);
+        listaDeStockNuevo.add(1.0);
+        listaDeStockNuevo.add(1.0);
+        listaDeStockNuevo.add(1.0);
+
+        listaDeArrepentidos.add(0);
+        listaDeArrepentidos.add(0);
+        listaDeArrepentidos.add(0);
+        listaDeArrepentidos.add(0);
+
+        listaDeLitrosHistoricos.add(0.0);
+        listaDeLitrosHistoricos.add(0.0);
+        listaDeLitrosHistoricos.add(0.0);
+        listaDeLitrosHistoricos.add(0.0);
 
         menorTppec = contTiempo.getMenorTppec();
 
