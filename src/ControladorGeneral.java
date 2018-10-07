@@ -6,6 +6,7 @@ public class ControladorGeneral {
     private int tppec = 0;
     private int tpd = 0;
     private int tpll = 0;
+    private int ia = 0;
     /* ---------------------------- */
     private ControladorDeTiempo contTiempo = new ControladorDeTiempo();
     private Scanner sc = new Scanner(System.in);
@@ -44,7 +45,7 @@ public class ControladorGeneral {
             }
             else{
 
-
+                simularLlegadaCliente();
 
             }
 
@@ -55,6 +56,21 @@ public class ControladorGeneral {
 
 
         }
+
+    }
+
+    private void simularLlegadaCliente() {
+
+        contTiempo.setTiempoActual(tpll);
+
+        ia = genRandom.generarIA();
+
+        tpll = contTiempo.getTiempoActual() + ia;
+
+        simularEleccionCerveza();
+
+        
+
 
     }
 
@@ -73,31 +89,7 @@ public class ControladorGeneral {
 
     }
 
-    private void generarTPPEC() {
 
-        Random random = new Random();
-
-        tppec = random.nextInt();
-
-    }
-
-
-    private void generarTPLL() {
-
-        Random random = new Random();
-
-        tpll = random.nextInt();
-
-    }
-
-
-    private void generarTPD(){
-
-        Random random = new Random();
-
-        tpd = random.nextInt();
-
-    }
 
     public void configInicial() {
         System.out.println("Ingrese cantidad de cerveza del tipo Ipa que desea comprar en cada pedido");
@@ -135,11 +127,11 @@ public class ControladorGeneral {
         mapaDeProximoDesperdicio.put("scottish",genRandom.getDiasDuracionScottish());
         mapaDeProximoDesperdicio.put("ipa",genRandom.getDiasDuracionIpa());
 
-        generarTPPEC();
+        tppec = genRandom.generarTPPEC();
 
-        generarTPD();
+        tpd = genRandom.generarTPD();
 
-        generarTPLL();
+        tpll = genRandom.generarTPLL();
 
     }
 

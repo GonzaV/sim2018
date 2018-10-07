@@ -54,6 +54,39 @@ public class GeneradorRandom {
 
     }
 
+    public int generarIA(){
+
+        Random random = new Random();
+        return random.nextInt();
+
+    }
+
+    public int generarTPPEC() {
+
+        Random random = new Random();
+
+        return random.nextInt();
+
+    }
+
+
+    public int generarTPLL() {
+
+        Random random = new Random();
+
+        return random.nextInt();
+
+    }
+
+
+    public int generarTPD(){
+
+        Random random = new Random();
+
+        return random.nextInt();
+
+    }
+
 
     public int getValorMinimoRubia() {
         return valorMinimoRubia;
