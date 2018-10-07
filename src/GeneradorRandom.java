@@ -31,7 +31,7 @@ public class GeneradorRandom {
     public double generarIA() {
 
        float r = random.nextFloat();
-
+       if(r == 1) r = (float) 0.99;
        //Divido por 1440 para pasarlo a dias, un dia tiene 1440 minutos
        return (380.91* (Math.pow(Math.pow(1/(1-r),1/397.15) - 1,1/1.7015))) / 1440;
 
@@ -83,7 +83,6 @@ public class GeneradorRandom {
             }
 
         }
-
     }
 
 }
