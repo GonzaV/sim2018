@@ -33,7 +33,12 @@ public class ControladorGeneral {
 
             if(menorTppec <= tpll){
 
-                int indiceAcambiar = contTiempo.getListaDeTiempoProxPedido().indexOf(menorTppec);
+                int indiceAcambiar = contTiempo.getListaDeProximoDesperdicio().indexOf(menorTppec);
+
+                //Si todos los elementos tienen el mismo valor, tira -1
+                if(indiceAcambiar == -1){
+                    indiceAcambiar = 0;
+                }
 
                 contTiempo.setTiempoActual(menorTppec);
 

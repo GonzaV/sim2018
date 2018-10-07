@@ -46,7 +46,13 @@ public class ControladorDeTiempo {
 
         int indexMenor = lista.indexOf(Collections.min(lista));
 
-        return  lista.get(indexMenor);
+        if(indexMenor == -1){
+            return lista.get(0);
+        }
+        else{
+            return lista.get(indexMenor);
+        }
+
 
     }
 
