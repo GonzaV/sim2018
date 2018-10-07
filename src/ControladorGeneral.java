@@ -7,12 +7,15 @@ public class ControladorGeneral {
     private int tpd = 0;
     private int tpll = 0;
     private int ia = 0;
+    private int ccs = 0;
     /* ---------------------------- */
     private ControladorDeTiempo contTiempo = new ControladorDeTiempo();
     private Scanner sc = new Scanner(System.in);
     private GeneradorRandom genRandom = new GeneradorRandom();
+    private HashMap<String,Integer> mapaDeArrepentidos = new HashMap<>();
+    private HashMap<String,Integer> mapaDeLitrosHistoricos = new HashMap<>();
     private HashMap<String,Integer> mapaDeStockNuevo = new HashMap<>();
-    private HashMap<String,Integer> mapaDeStockActual = new HashMap<>();
+    private HashMap<String,Integer> mapaDeStockViejo = new HashMap<>();
     private HashMap<String,Integer> mapaDeCantidades = new HashMap<>();
     private HashMap<String,Integer> mapaDeDiasEntrePedidos = new HashMap<>();
     private HashMap<String,Integer> mapaDeProximoDesperdicio = new HashMap<>();
@@ -30,15 +33,22 @@ public class ControladorGeneral {
                 tppec = contTiempo.getTiempoActual() + 1;
 
                 /*
-                ACTUALIZO EL STOCK DE (i), EN ESTE CASO, COMO EJEMPLO, DICE RUBIA
-                mapaDeStockActual.put("rubia",mapaDeStockActual.get("rubia") + cantidadComprada);
+                EL QUE ERA STOCK NUEVO AHORA ES VIEJO, EN ESTE CASO, COMO EJEMPLO, DICE RUBIA
+                mapaDeStockViejo.put("rubia",mapaDeStockNuevo.get("rubia"));
                  */
 
                 /*
-                ACTUALIZO EL STOCK NUEVO DE (i), EN ESTE CASO, COMO EJEMPLO, DICE RUBIA
-                EL STOCK NUEVO ES EL RECIEN COMPRADO, PARA NO TIRARLO CUANDO LLEGUE EL TPD
+                ACTUALIZO EL STOCK NUEVO DE (i) CON LO COMPRADO, EN ESTE CASO, COMO EJEMPLO, DICE RUBIA
+                RECORDAR QUE EL QUE ERA NUEVO PASO A SER VIEJO POR LA COMPRA RECIENTE
                 mapaDeStockNuevo.put("rubia", cantidadComprada);
                  */
+
+                /*
+                ACTUALIZO EL TOTAL HISTORICO DE CERVEZA MANEJADA
+                mapaDeLitrosHistoricos.put("rubia", mapaDeLitrosHistoricos.get("rubia") + cantidadComprada);
+                 */
+
+
 
                 chequearTiempoFinal();
 
@@ -61,15 +71,56 @@ public class ControladorGeneral {
 
     private void simularLlegadaCliente() {
 
+        String cervezaElegida = null;
+
         contTiempo.setTiempoActual(tpll);
 
         ia = genRandom.generarIA();
 
         tpll = contTiempo.getTiempoActual() + ia;
 
-        simularEleccionCerveza();
+        //EN ESTE METODO DEBERIA AUMENTAR CTC(i) EN 1
+        cervezaElegida = genRandom.generarEleccionCerveza();
 
-        
+        ccs = genRandom.generarCCS();
+
+        if(mapaDeStockViejo.get("HARCODEADO") + mapaDeStockNuevo.get("HARCODEADO") >= ccs){
+
+            if(mapaDeStockViejo.get("HARCODEADO") > 0){
+
+                if(mapaDeStockViejo.get("HARCODEADO") >= ccs){
+
+                    mapaDeStockViejo.put("HARCODEADO",mapaDeStockViejo.get("HARCODEADO") - ccs);
+
+                    chequearTiempoFinal();
+
+                }
+                else{
+
+                    mapaDeStockNuevo.put("HARCODEADO",mapaDeStockNuevo.get("HARCODEADO") + mapaDeStockViejo.get("HARCODEADO") - ccs);
+                    mapaDeStockViejo.put("HARCODEADO",0);
+
+                    chequearTiempoFinal();
+
+                }
+
+            }
+            else{
+
+                mapaDeStockNuevo.put("HARCODEADO",mapaDeStockNuevo.get("HARCODEADO") - ccs);
+
+                chequearTiempoFinal();
+
+            }
+
+        }
+        else{
+
+            mapaDeArrepentidos.put("HARCODEADO",mapaDeArrepentidos.get("HARCODEADO") + 1);
+
+            chequearTiempoFinal();
+        }
+
 
 
     }

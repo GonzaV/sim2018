@@ -87,6 +87,20 @@ public class GeneradorRandom {
 
     }
 
+    public int generarCCS(){
+
+        Random random = new Random();
+
+        return random.nextInt();
+
+    }
+
+    public String generarEleccionCerveza(){
+
+        return "HARCODEADO";
+
+    }
+
 
     public int getValorMinimoRubia() {
         return valorMinimoRubia;
