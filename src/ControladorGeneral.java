@@ -84,44 +84,37 @@ public class ControladorGeneral {
 
         ccs = genRandom.generarCCS();
 
-        if(mapaDeStockViejo.get("HARCODEADO") + mapaDeStockNuevo.get("HARCODEADO") >= ccs){
+        if(mapaDeStockViejo.get(cervezaElegida) + mapaDeStockNuevo.get(cervezaElegida) >= ccs){
 
-            if(mapaDeStockViejo.get("HARCODEADO") > 0){
+            if(mapaDeStockViejo.get(cervezaElegida) > 0){
 
-                if(mapaDeStockViejo.get("HARCODEADO") >= ccs){
+                if(mapaDeStockViejo.get(cervezaElegida) >= ccs){
 
-                    mapaDeStockViejo.put("HARCODEADO",mapaDeStockViejo.get("HARCODEADO") - ccs);
-
-                    chequearTiempoFinal();
+                    mapaDeStockViejo.put(cervezaElegida,mapaDeStockViejo.get(cervezaElegida) - ccs);
 
                 }
                 else{
 
-                    mapaDeStockNuevo.put("HARCODEADO",mapaDeStockNuevo.get("HARCODEADO") + mapaDeStockViejo.get("HARCODEADO") - ccs);
-                    mapaDeStockViejo.put("HARCODEADO",0);
-
-                    chequearTiempoFinal();
+                    mapaDeStockNuevo.put(cervezaElegida,mapaDeStockNuevo.get(cervezaElegida) + mapaDeStockViejo.get(cervezaElegida) - ccs);
+                    mapaDeStockViejo.put(cervezaElegida,0);
 
                 }
 
             }
             else{
 
-                mapaDeStockNuevo.put("HARCODEADO",mapaDeStockNuevo.get("HARCODEADO") - ccs);
-
-                chequearTiempoFinal();
+                mapaDeStockNuevo.put(cervezaElegida,mapaDeStockNuevo.get(cervezaElegida) - ccs);
 
             }
 
         }
         else{
 
-            mapaDeArrepentidos.put("HARCODEADO",mapaDeArrepentidos.get("HARCODEADO") + 1);
+            mapaDeArrepentidos.put(cervezaElegida,mapaDeArrepentidos.get(cervezaElegida) + 1);
 
-            chequearTiempoFinal();
         }
 
-
+        chequearTiempoFinal();
 
     }
 
