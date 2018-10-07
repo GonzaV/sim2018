@@ -37,7 +37,7 @@ public class GeneradorRandom {
 
     }
 
-    public int generarTPD(){
+    public int generarTPD(int indiceEstilo){
 
         Random random = new Random();
 

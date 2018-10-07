@@ -20,6 +20,8 @@ public class ControladorGeneral {
 
     private List<Integer> listaDeArrepentidos = new ArrayList<>();
     private List<Double> listaDeLitrosHistoricos = new ArrayList<>();
+    private List<Double> listaDeProximoVencimientoStockNuevo = new ArrayList<>();
+    private List<Double> listaDeLitrosDescartadosHistoricos = new ArrayList<>();
     private List<Double> listaDeStockNuevo = new ArrayList<>();
     private List<Double> listaDeStockViejo = new ArrayList<>();
     private List<Double> listaDeCantidades = new ArrayList<>();
@@ -29,56 +31,76 @@ public class ControladorGeneral {
 
     public void correrAlgoritmoPrincipal() {
 
-        if(menorTppec <= menorTpd){
+        if (menorTppec <= menorTpd) {
 
-            if(menorTppec <= tpll){
+            if (menorTppec <= tpll) {
 
-                int indiceAcambiar = contTiempo.getListaDeProximoDesperdicio().indexOf(menorTppec);
+                simularPedido();
 
-                //Si todos los elementos tienen el mismo valor, tira -1
-                if(indiceAcambiar == -1){
-                    indiceAcambiar = 0;
-                }
-
-                contTiempo.setTiempoActual(menorTppec);
-
-                //Aca hago TPPEC(i) <- T + N(i), es decir, T mas dias para la prox compra de (i)
-                contTiempo.getListaDeTiempoProxPedido().set(indiceAcambiar,contTiempo.getListaDeTiempoProxPedido().get(indiceAcambiar) + listaDiasEntrePedidos.get(indiceAcambiar));
-
-                //EL QUE ERA STOCK NUEVO AHORA ES VIEJO
-                listaDeStockViejo.set(indiceAcambiar, listaDeStockViejo.get(indiceAcambiar) + listaDeStockNuevo.get(indiceAcambiar));
-
-                //ACTUALIZO EL STOCK NUEVO DE (i) CON LO COMPRADO. RECORDAR QUE EL QUE ERA NUEVO PASO A SER VIEJO POR LA COMPRA RECIENTE
-                listaDeStockNuevo.set(indiceAcambiar,listaDeCantidades.get(indiceAcambiar));
-
-                //ACTUALIZO EL TOTAL HISTORICO DE CERVEZA MANEJADA
-                listaDeLitrosHistoricos.set(indiceAcambiar, listaDeLitrosHistoricos.get(indiceAcambiar) + listaDeCantidades.get(indiceAcambiar));
-
-                chequearTiempoFinal();
-
-            }
-            else{
+            } else {
 
                 simularLlegadaCliente();
 
             }
+        } else {
 
-        }
-        else{
-
-            if(tpll <= menorTpd){
+            if (tpll <= menorTpd) {
 
                 simularLlegadaCliente();
 
+            } else {
+
+                this.simularVencimiento();
+
             }
-            else{
-
-                contTiempo.setTiempoActual(menorTpd);
-
-            }
-
         }
 
+        chequearTiempoFinal();
+    }
+
+    private void simularPedido() {
+        int cervezaPedida = contTiempo.getListaDeTiempoProxPedido().indexOf(menorTppec);
+
+        //Si todos los elementos tienen el mismo valor, tira -1
+        if(cervezaPedida == -1){
+             cervezaPedida = 0;
+        }
+
+        contTiempo.setTiempoActual(menorTppec);
+
+        //Aca hago TPPEC(i) <- T + N(i), es decir, T mas dias para la prox compra de (i)
+        contTiempo.getListaDeTiempoProxPedido().set(cervezaPedida, contTiempo.getListaDeTiempoProxPedido().get(cervezaPedida) + listaDiasEntrePedidos.get(cervezaPedida));
+
+        //EL QUE ERA STOCK NUEVO AHORA ES VIEJO
+        listaDeStockViejo.set(cervezaPedida, listaDeStockNuevo.get(cervezaPedida));
+
+        //ACTUALIZO EL STOCK NUEVO DE (i) CON LO COMPRADO. RECORDAR QUE EL QUE ERA NUEVO PASO A SER VIEJO POR LA COMPRA RECIENTE
+        listaDeStockNuevo.set(cervezaPedida, listaDeCantidades.get(cervezaPedida));
+
+        //ACTUALIZO EL TOTAL HISTORICO DE CERVEZA MANEJADA
+        listaDeLitrosHistoricos.set(cervezaPedida, listaDeLitrosHistoricos.get(cervezaPedida) + listaDeCantidades.get(cervezaPedida));
+
+        //GENERO EL PROXIMO VENCIMIENTO PARA EL STOCK QUE ACABO DE REPONER
+        double vencimiento = genRandom.generarTPD(cervezaPedida);
+
+        //GUARDO EN LA LISTA AUXILIAR ESTE PROXIMO VENCIMIENTO PARA NO PISAR EL VENCIMIENTO DEL STOCK ANTERIOR
+        this.listaDeProximoVencimientoStockNuevo.set(cervezaPedida, contTiempo.getTiempoActual() + vencimiento);
+    }
+
+    private void simularVencimiento() {
+
+        int cervezaVencida = contTiempo.getListaDeProximoDesperdicio().indexOf(menorTpd);
+
+        contTiempo.setTiempoActual(menorTpd);
+
+        //ACUMULO POR CADA ESTILO DE CERVEZA EL TOTAL DE LITROS DESCARTADOS
+        listaDeLitrosDescartadosHistoricos.set(cervezaVencida, this.listaDeLitrosDescartadosHistoricos.get(cervezaVencida) + this.listaDeStockViejo.get(cervezaVencida));
+
+        //SE VENCE EL STOCK VIEJO
+        this.listaDeStockViejo.set(cervezaVencida, 0.0);
+
+        //EL PROXIMO DESPERDICIO ES EL DEL STOCK QUE HASTA EL MOMENTO ES EL NUEVO
+        contTiempo.getListaDeProximoDesperdicio().set(cervezaVencida, this.listaDeProximoVencimientoStockNuevo.get(cervezaVencida));
     }
 
     private void simularLlegadaCliente() {
@@ -90,57 +112,47 @@ public class ControladorGeneral {
         tpll = contTiempo.getTpll();
 
         //EN ESTE METODO DEBERIA AUMENTAR CTC(i) EN 1
-        listaTotalDeElecciones.set(cervezaElegida,listaTotalDeElecciones.get(cervezaElegida) + 1);
+        listaTotalDeElecciones.set(cervezaElegida, listaTotalDeElecciones.get(cervezaElegida) + 1);
 
         ccs = genRandom.generarCCS();
 
-        if(listaDeStockViejo.get(cervezaElegida) + listaDeStockNuevo.get(cervezaElegida) >= ccs){
+        if (listaDeStockViejo.get(cervezaElegida) + listaDeStockNuevo.get(cervezaElegida) >= ccs) {
 
-            if(listaDeStockViejo.get(cervezaElegida) > 0){
+            if (listaDeStockViejo.get(cervezaElegida) > 0) {
 
-                if(listaDeStockViejo.get(cervezaElegida) >= ccs){
+                if (listaDeStockViejo.get(cervezaElegida) >= ccs) {
 
-                    listaDeStockViejo.set(cervezaElegida,listaDeStockViejo.get(cervezaElegida) - ccs);
+                    listaDeStockViejo.set(cervezaElegida, listaDeStockViejo.get(cervezaElegida) - ccs);
+
+                } else {
+
+                    listaDeStockNuevo.set(cervezaElegida, listaDeStockNuevo.get(cervezaElegida) + listaDeStockViejo.get(cervezaElegida) - ccs);
+                    listaDeStockViejo.set(cervezaElegida, 0.0);
 
                 }
-                else{
+            } else {
 
-                    listaDeStockNuevo.set(cervezaElegida,listaDeStockNuevo.get(cervezaElegida) + listaDeStockViejo.get(cervezaElegida) - ccs);
-                    listaDeStockViejo.set(cervezaElegida,0.0);
-
-                }
+                listaDeStockNuevo.set(cervezaElegida, listaDeStockNuevo.get(cervezaElegida) - ccs);
 
             }
-            else{
+        } else {
 
-                listaDeStockNuevo.set(cervezaElegida,listaDeStockNuevo.get(cervezaElegida) - ccs);
-
-            }
+            listaDeArrepentidos.set(cervezaElegida, listaDeArrepentidos.get(cervezaElegida) + 1);
 
         }
-        else{
-
-            listaDeArrepentidos.set(cervezaElegida,listaDeArrepentidos.get(cervezaElegida) + 1);
-
-        }
-
-        chequearTiempoFinal();
-
     }
 
     private void chequearTiempoFinal() {
 
-        if(contTiempo.getTiempoActual() >= contTiempo.getTiempoTotal()){
+        if (contTiempo.getTiempoActual() >= contTiempo.getTiempoTotal()) {
 
             System.out.println("Termine");
 
-        }
-        else{
+        } else {
 
             correrAlgoritmoPrincipal();
 
         }
-
     }
 
     public void configInicial() {
@@ -175,7 +187,7 @@ public class ControladorGeneral {
         System.out.println("Ingrese la duracion en dias de la simulacion, debe ser mayor a 180");
         double duracionEnDias = sc.nextDouble();
 
-        while(duracionEnDias <= 180){
+        while (duracionEnDias <= 180) {
 
             System.out.println("El valor debe ser mayor a 180, por favor ingrese otro valor");
             duracionEnDias = sc.nextDouble();
