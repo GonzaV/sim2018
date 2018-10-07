@@ -1,15 +1,15 @@
-import java.util.Random;
+    import java.util.Random;
 
 public class GeneradorRandom {
 
     private int valorMinimoRubia = 20;
-    private int valorMaximoRubia = 42;
-    private int valorMinimoIpa = 15;
+    private int valorMaximoRubia = 40;
+    private int valorMinimoIpa = 22;
     private int valorMaximoIpa = 36;
-    private int valorMinimoStout = 18;
-    private int valorMaximoStout = 40;
-    private int valorMinimoScottish = 23;
-    private int valorMaximoScottish = 40;
+    private int valorMinimoStout = 25;
+    private int valorMaximoStout = 37;
+    private int valorMinimoScottish = 18;
+    private int valorMaximoScottish = 33;
 
     public int getDiasDuracionRubia(){
 
