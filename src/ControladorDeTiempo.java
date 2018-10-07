@@ -3,7 +3,7 @@ import java.util.*;
 public class ControladorDeTiempo {
 
     private GeneradorRandom genRandom = new GeneradorRandom();
-    private List<Double> ListaDeProximoDesperdicio = new ArrayList<>();
+    private List<Double> listaDeProximoDesperdicio = new ArrayList<>();
     private List<Double> listaDeTiempoProxPedido = new ArrayList<>();
 
     private double tiempoActual = 0;
@@ -39,7 +39,7 @@ public class ControladorDeTiempo {
     }
 
     public List<Double> getListaDeProximoDesperdicio() {
-        return ListaDeProximoDesperdicio;
+        return listaDeProximoDesperdicio;
     }
 
     public double getMenorListaDouble(List<Double> lista){
