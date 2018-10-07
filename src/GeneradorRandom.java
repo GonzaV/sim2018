@@ -55,33 +55,18 @@ public class GeneradorRandom {
 
         Float resultadoRandom = random.nextFloat();
 
-        if(resultadoRandom <= 0.1){
-
-            return 3;
-
-        }
-        else{
-
-            if(resultadoRandom <= 0.25 && resultadoRandom > 0.1){
-
-                return 2;
-
-            }
-            else{
-
-                if(resultadoRandom <= 0.45 && resultadoRandom > 0.25){
-
-                    return 1;
-
+        if( resultadoRandom <= 0.55){
+            return 0;
+        } else{
+            if(resultadoRandom <= 0.75){
+                return 1;
+            } else {
+                if( resultadoRandom <= 0.9){
+                    return 2;
+                } else {
+                    return 3;
                 }
-                else{
-
-                    return 0;
-
-                }
-
             }
-
         }
     }
 
