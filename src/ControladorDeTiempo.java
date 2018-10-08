@@ -45,15 +45,7 @@ public class ControladorDeTiempo {
     public double getMenorListaDouble(List<Double> lista){
 
         int indexMenor = lista.indexOf(Collections.min(lista));
-
-        if(indexMenor == -1){
-            return lista.get(0);
-        }
-        else{
-            return lista.get(indexMenor);
-        }
-
-
+        return lista.get(indexMenor);
     }
 
     public double getMenorTppec(){
