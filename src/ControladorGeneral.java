@@ -64,7 +64,7 @@ public class ControladorGeneral {
         contTiempo.setTiempoActual(menorTppec);
 
         //Aca hago TPPEC(i) <- T + N(i), es decir, T mas dias para la prox compra de (i)
-        contTiempo.getListaDeTiempoProxPedido().set(cervezaPedida, contTiempo.getListaDeTiempoProxPedido().get(cervezaPedida) + listaDiasEntrePedidos.get(cervezaPedida));
+        contTiempo.getListaDeTiempoProxPedido().set(cervezaPedida, contTiempo.getTiempoActual() + listaDiasEntrePedidos.get(cervezaPedida));
 
         //EL QUE ERA STOCK NUEVO AHORA ES VIEJO
         listaDeStockViejo.set(cervezaPedida, listaDeStockNuevo.get(cervezaPedida));
