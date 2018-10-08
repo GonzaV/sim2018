@@ -37,12 +37,23 @@ public class GeneradorRandom {
 
     }
 
-    public int generarTPD(int indiceEstilo){
+    public double generarTPD(int indiceEstilo){
 
-        Random random = new Random();
-
-        return random.nextInt();
-
+        double duracion;
+        switch(indiceEstilo){
+            case 0:
+                duracion = getDiasDuracionIpa();
+                break;
+            case 1:
+                duracion = getDiasDuracionStout();
+                break;
+            case 2:
+                duracion = getDiasDuracionScottish();
+                break;
+            default:
+                duracion = getDiasDuracionRubia();
+        }
+        return duracion;
     }
 
     public float generarCCS(){

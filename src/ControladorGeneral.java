@@ -20,13 +20,13 @@ public class ControladorGeneral {
     private Scanner sc = new Scanner(System.in);
     private GeneradorRandom genRandom = new GeneradorRandom();
 
-    private List<Integer> listaDeArrepentidos = new ArrayList<>();
-    private List<Integer> cantidadTotalClientes = new ArrayList<>();
+    private List<Integer> listaDeArrepentidos = Arrays.asList(0,0,0,0);
+    private List<Integer> cantidadTotalClientes = Arrays.asList(0,0,0,0);
 
-    private List<Double> listaDeLitrosHistoricos = new ArrayList<>();
-    private List<Double> listaDeLitrosDescartadosHistoricos = new ArrayList<>();
+    private List<Double> listaDeLitrosHistoricos = Arrays.asList(0.0,0.0,0.0,0.0);
+    private List<Double> listaDeLitrosDescartadosHistoricos = Arrays.asList(0.0,0.0,0.0,0.0);
 
-    private List<Double> listaDeProximoVencimientoStockNuevo = new ArrayList<>();
+    private List<Double> listaDeProximoVencimientoStockNuevo = Arrays.asList(0.0,0.0,0.0,0.0);
 
     private List<Double> listaDeStockNuevo = new ArrayList<>();
     private List<Double> listaDeStockViejo = new ArrayList<>();
@@ -34,28 +34,30 @@ public class ControladorGeneral {
     private List<Double> listaDeCantidades = new ArrayList<>();
     private List<Double> listaDiasEntrePedidos = new ArrayList<>();
 
-    private List<Integer> listaTotalDeElecciones = new ArrayList<>(); //CTC(i)
-
     private List<String> nombresEstilos = Arrays.asList("Ipa", "Stout", "Scottish", "Rubia");
 
     public void correrAlgoritmoPrincipal() {
+
+        menorTppec = contTiempo.getMenorTppec();
+
+        menorTpd = contTiempo.getMenorTpd();
 
         if (menorTppec <= menorTpd) {
 
             if (menorTppec <= tpll) {
 
-                simularPedido();
+                this.simularPedido();
 
             } else {
 
-                simularLlegadaCliente();
+                this.simularLlegadaCliente();
 
             }
         } else {
 
             if (tpll <= menorTpd) {
 
-                simularLlegadaCliente();
+                this.simularLlegadaCliente();
 
             } else {
 
@@ -68,7 +70,10 @@ public class ControladorGeneral {
     }
 
     private void simularPedido() {
+
         int cervezaPedida = contTiempo.getListaDeTiempoProxPedido().indexOf(menorTppec);
+
+        System.out.println("Nueva reposición de stock de " + this.nombresEstilos.get(cervezaPedida));
 
         //Si todos los elementos tienen el mismo valor, tira -1
         if(cervezaPedida == -1){
@@ -100,6 +105,8 @@ public class ControladorGeneral {
 
         int cervezaVencida = contTiempo.getListaDeProximoDesperdicio().indexOf(menorTpd);
 
+        System.out.println("Vencimiento de la cerveza " + this.nombresEstilos.get(cervezaVencida));
+
         contTiempo.setTiempoActual(menorTpd);
 
         //ACUMULO POR CADA ESTILO DE CERVEZA EL TOTAL DE LITROS DESCARTADOS
@@ -114,14 +121,13 @@ public class ControladorGeneral {
 
     private void simularLlegadaCliente() {
 
+        System.out.println("Atendiendo un cliente...");
+
         int cervezaElegida = genRandom.generarEleccionCerveza();
 
         contTiempo.setTiempoActual(tpll);
 
         tpll = contTiempo.getTpll();
-
-        //EN ESTE METODO DEBERIA AUMENTAR CTC(i) EN 1
-        listaTotalDeElecciones.set(cervezaElegida, listaTotalDeElecciones.get(cervezaElegida) + 1);
 
         ccs = genRandom.generarCCS();
 
@@ -148,6 +154,7 @@ public class ControladorGeneral {
             }
         } else {
 
+            System.out.println("El cliente no pudo ser atendido por falta de cerveza!!!");
             listaDeArrepentidos.set(cervezaElegida, listaDeArrepentidos.get(cervezaElegida) + 1);
 
         }
@@ -234,34 +241,15 @@ public class ControladorGeneral {
         contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionScottish());
         contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionRubia());
 
-        listaTotalDeElecciones.add(0);
-        listaTotalDeElecciones.add(0);
-        listaTotalDeElecciones.add(0);
-        listaTotalDeElecciones.add(0);
-
         listaDeStockViejo.add(10.0);
         listaDeStockViejo.add(10.0);
         listaDeStockViejo.add(10.0);
         listaDeStockViejo.add(10.0);
 
-        listaDeStockNuevo.add(1.0);
-        listaDeStockNuevo.add(1.0);
-        listaDeStockNuevo.add(1.0);
-        listaDeStockNuevo.add(1.0);
-
-        listaDeArrepentidos.add(0);
-        listaDeArrepentidos.add(0);
-        listaDeArrepentidos.add(0);
-        listaDeArrepentidos.add(0);
-
-        listaDeLitrosHistoricos.add(0.0);
-        listaDeLitrosHistoricos.add(0.0);
-        listaDeLitrosHistoricos.add(0.0);
-        listaDeLitrosHistoricos.add(0.0);
-
-        menorTppec = contTiempo.getMenorTppec();
-
-        menorTpd = contTiempo.getMenorTpd();
+        listaDeStockNuevo.add(20.0);
+        listaDeStockNuevo.add(20.0);
+        listaDeStockNuevo.add(20.0);
+        listaDeStockNuevo.add(20.0);
 
         tpll = contTiempo.getTpll();
 
