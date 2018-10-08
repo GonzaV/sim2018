@@ -36,12 +36,12 @@ public class ControladorGeneral {
 
     private List<String> nombresEstilos = Arrays.asList("Ipa", "Stout", "Scottish", "Rubia");
 
-    int i = 0;
+    private int numeroDeIteracion = 0;
 
     public void correrAlgoritmoPrincipal() {
 
-        i++;
-        System.out.println(i);
+        numeroDeIteracion++;
+        System.out.println("Numero de iteracion: " + numeroDeIteracion);
 
         menorTppec = contTiempo.getMenorTppec();
 
@@ -183,22 +183,16 @@ public class ControladorGeneral {
         for(int i = 0; i < 4; i++) {
 
             double porcentajeVentasNoConcretadas = 0.0;
-            double porcentajeArrepentimientos = 0.0;
+            double porcentajeLitrosDescartados = 0.0;
 
             System.out.println("-----------------------------------------------");
             System.out.println("Resultados del estilo de cerveza " + this.nombresEstilos.get(i) + ":\n");
 
-            for(int i2 = 0; i2 < listaDeLitrosDescartadosHistoricos.size(); i2++){
-                System.out.println(listaDeLitrosDescartadosHistoricos.get(i2));
-            }
-            for(int i2 = 0; i2 < listaDeLitrosHistoricos.size(); i2++){
-                System.out.println(listaDeLitrosHistoricos.get(i2));
-            }
             porcentajeVentasNoConcretadas += (listaDeArrepentidos.get(i) / cantidadTotalClientes.get(i)) * 100;
-            porcentajeArrepentimientos += (listaDeLitrosDescartadosHistoricos.get(i) / listaDeLitrosHistoricos.get(i)) *100;
+            porcentajeLitrosDescartados += (listaDeLitrosDescartadosHistoricos.get(i) / listaDeLitrosHistoricos.get(i)) *100;
 
             System.out.println("Porcentaje de ventas no concretadas: " + porcentajeVentasNoConcretadas);
-            System.out.println("Porcentaje de arrepentimientos: " + porcentajeArrepentimientos);
+            System.out.println("Porcentaje de litros descartados: " + porcentajeLitrosDescartados);
 
             System.out.println("Variables de control:\n");
 
@@ -239,9 +233,9 @@ public class ControladorGeneral {
         System.out.println("Ingrese la duracion en dias de la simulacion, debe ser mayor a 180");
         double duracionEnDias = sc.nextDouble();
 
-        while (duracionEnDias <= 1) {
+        while (duracionEnDias <= 180 || duracionEnDias >= 500) {
 
-            System.out.println("El valor debe ser mayor a 180, por favor ingrese otro valor");
+            System.out.println("El valor debe ser mayor a 180 y menor a 500, por favor ingrese otro valor");
             duracionEnDias = sc.nextDouble();
 
         }
