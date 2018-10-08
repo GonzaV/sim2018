@@ -61,6 +61,11 @@ public class ControladorGeneral {
     private void simularPedido() {
         int cervezaPedida = contTiempo.getListaDeTiempoProxPedido().indexOf(menorTppec);
 
+        //Si todos los elementos tienen el mismo valor, tira -1
+        if(cervezaPedida == -1){
+             cervezaPedida = 0;
+        }
+
         contTiempo.setTiempoActual(menorTppec);
 
         //Aca hago TPPEC(i) <- T + N(i), es decir, T mas dias para la prox compra de (i)
