@@ -20,8 +20,8 @@ public class ControladorGeneral {
     private Scanner sc = new Scanner(System.in);
     private GeneradorRandom genRandom = new GeneradorRandom();
 
-    private List<Integer> listaDeArrepentidos = Arrays.asList(0,0,0,0);
-    private List<Integer> cantidadTotalClientes = Arrays.asList(0,0,0,0);
+    private List<Double> listaDeArrepentidos = Arrays.asList(0.0,0.0,0.0,0.0);
+    private List<Double> cantidadTotalClientes = Arrays.asList(0.0,0.0,0.0,0.0);
 
     private List<Double> listaDeLitrosHistoricos = Arrays.asList(0.0,0.0,0.0,0.0);
     private List<Double> listaDeLitrosDescartadosHistoricos = Arrays.asList(0.0,0.0,0.0,0.0);
@@ -36,7 +36,12 @@ public class ControladorGeneral {
 
     private List<String> nombresEstilos = Arrays.asList("Ipa", "Stout", "Scottish", "Rubia");
 
+    int i = 0;
+
     public void correrAlgoritmoPrincipal() {
+
+        i++;
+        System.out.println(i);
 
         menorTppec = contTiempo.getMenorTppec();
 
@@ -154,7 +159,7 @@ public class ControladorGeneral {
             }
         } else {
 
-            System.out.println("El cliente no pudo ser atendido por falta de cerveza!!!");
+            System.out.println("El cliente no pudo ser atendido por falta de cerveza!!! " + "Tipo" + cervezaElegida);
             listaDeArrepentidos.set(cervezaElegida, listaDeArrepentidos.get(cervezaElegida) + 1);
 
         }
@@ -175,15 +180,22 @@ public class ControladorGeneral {
 
     private void calculoEImpresionDeResultados() {
 
-        Double porcentajeVentasNoConcretadas;
-        Double porcentajeArrepentimientos;
-
         for(int i = 0; i < 4; i++) {
 
+            double porcentajeVentasNoConcretadas = 0.0;
+            double porcentajeArrepentimientos = 0.0;
+
+            System.out.println("-----------------------------------------------");
             System.out.println("Resultados del estilo de cerveza " + this.nombresEstilos.get(i) + ":\n");
 
-            porcentajeVentasNoConcretadas = ((double) (this.listaDeArrepentidos.get(i) / this.cantidadTotalClientes.get(i))) *100;
-            porcentajeArrepentimientos = ((double) this.listaDeLitrosDescartadosHistoricos.get(i) / this.listaDeLitrosHistoricos.get(i)) *100;
+            for(int i2 = 0; i2 < listaDeLitrosDescartadosHistoricos.size(); i2++){
+                System.out.println(listaDeLitrosDescartadosHistoricos.get(i2));
+            }
+            for(int i2 = 0; i2 < listaDeLitrosHistoricos.size(); i2++){
+                System.out.println(listaDeLitrosHistoricos.get(i2));
+            }
+            porcentajeVentasNoConcretadas += (listaDeArrepentidos.get(i) / cantidadTotalClientes.get(i)) * 100;
+            porcentajeArrepentimientos += (listaDeLitrosDescartadosHistoricos.get(i) / listaDeLitrosHistoricos.get(i)) *100;
 
             System.out.println("Porcentaje de ventas no concretadas: " + porcentajeVentasNoConcretadas);
             System.out.println("Porcentaje de arrepentimientos: " + porcentajeArrepentimientos);
@@ -227,7 +239,7 @@ public class ControladorGeneral {
         System.out.println("Ingrese la duracion en dias de la simulacion, debe ser mayor a 180");
         double duracionEnDias = sc.nextDouble();
 
-        while (duracionEnDias <= 180) {
+        while (duracionEnDias <= 1) {
 
             System.out.println("El valor debe ser mayor a 180, por favor ingrese otro valor");
             duracionEnDias = sc.nextDouble();
@@ -236,6 +248,13 @@ public class ControladorGeneral {
 
         contTiempo.setTiempoTotal(duracionEnDias);
 
+        inicializarListas();
+
+        tpll = contTiempo.getTpll();
+
+    }
+
+    private void inicializarListas() {
         contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionIpa());
         contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionStout());
         contTiempo.getListaDeProximoDesperdicio().add(genRandom.getDiasDuracionScottish());
@@ -250,9 +269,6 @@ public class ControladorGeneral {
         listaDeStockNuevo.add(20.0);
         listaDeStockNuevo.add(20.0);
         listaDeStockNuevo.add(20.0);
-
-        tpll = contTiempo.getTpll();
-
     }
 
 }
