@@ -1,3 +1,5 @@
+import javafx.scene.control.TextInputControl;
+
 import java.util.*;
 
 public class ControladorGeneral {
@@ -19,15 +21,22 @@ public class ControladorGeneral {
     private GeneradorRandom genRandom = new GeneradorRandom();
 
     private List<Integer> listaDeArrepentidos = new ArrayList<>();
+    private List<Integer> cantidadTotalClientes = new ArrayList<>();
+
     private List<Double> listaDeLitrosHistoricos = new ArrayList<>();
-    private List<Double> listaDeProximoVencimientoStockNuevo = new ArrayList<>();
     private List<Double> listaDeLitrosDescartadosHistoricos = new ArrayList<>();
+
+    private List<Double> listaDeProximoVencimientoStockNuevo = new ArrayList<>();
+
     private List<Double> listaDeStockNuevo = new ArrayList<>();
     private List<Double> listaDeStockViejo = new ArrayList<>();
+
     private List<Double> listaDeCantidades = new ArrayList<>();
     private List<Double> listaDiasEntrePedidos = new ArrayList<>();
+
     private List<Integer> listaTotalDeElecciones = new ArrayList<>(); //CTC(i)
 
+    private List<String> nombresEstilos = Arrays.asList("Ipa", "Stout", "Scottish", "Rubia");
 
     public void correrAlgoritmoPrincipal() {
 
@@ -116,6 +125,8 @@ public class ControladorGeneral {
 
         ccs = genRandom.generarCCS();
 
+        this.cantidadTotalClientes.set(cervezaElegida, this.cantidadTotalClientes.get(cervezaElegida) + 1);
+
         if (listaDeStockViejo.get(cervezaElegida) + listaDeStockNuevo.get(cervezaElegida) >= ccs) {
 
             if (listaDeStockViejo.get(cervezaElegida) > 0) {
@@ -146,12 +157,34 @@ public class ControladorGeneral {
 
         if (contTiempo.getTiempoActual() >= contTiempo.getTiempoTotal()) {
 
-            System.out.println("Termine");
+            this.calculoEImpresionDeResultados();
 
         } else {
 
             correrAlgoritmoPrincipal();
 
+        }
+    }
+
+    private void calculoEImpresionDeResultados() {
+
+        Double porcentajeVentasNoConcretadas;
+        Double porcentajeArrepentimientos;
+
+        for(int i = 0; i < 4; i++) {
+
+            System.out.println("Resultados del estilo de cerveza " + this.nombresEstilos.get(i) + ":\n");
+
+            porcentajeVentasNoConcretadas = ((double) (this.listaDeArrepentidos.get(i) / this.cantidadTotalClientes.get(i))) *100;
+            porcentajeArrepentimientos = ((double) this.listaDeLitrosDescartadosHistoricos.get(i) / this.listaDeLitrosHistoricos.get(i)) *100;
+
+            System.out.println("Porcentaje de ventas no concretadas: " + porcentajeVentasNoConcretadas);
+            System.out.println("Porcentaje de arrepentimientos: " + porcentajeArrepentimientos);
+
+            System.out.println("Variables de control:\n");
+
+            System.out.println("Cantidad de litros de cerveza a preparar: " + this.listaDeCantidades.get(i));
+            System.out.println("Cantidad de días entre un pedido y el siguiente : " + this.listaDiasEntrePedidos.get(i));
         }
     }
 
